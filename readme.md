@@ -80,7 +80,7 @@ Here is the summary of all the queries that we are going to look at.
 What does the structure and data of the `customers` table look like?
 
 
-We can use SELECT * to select all the columns in a table. Be careful when using this with large tables, as it will return all columns and rows for a table. It is advisable to specify the columns you would like and/or use this with LIMIT to avoid issues.
+We want to explore the structure and sample data of the customers table. This helps understand what columns are available and what kind of data is stored before running more advanced queries.
 
 **Query:**
 
@@ -89,6 +89,11 @@ SELECT * FROM customers LIMIT 5;
 ```
 !["basic SELECT"](Images/Previewoftable.png)
 
+**Notes / Interpretation:**
+
+* Retrieves the first 5 rows to quickly inspect data.
+* Helps understand how to reference columns in later queries.
+* Avoid `SELECT *` on large tables without limits to prevent performance issues.
 
 
 ---
@@ -106,6 +111,12 @@ SELECT first_name, last_name, email FROM customers WHERE city = 'New York';
 
 !["Customers in NEW YORK"](Images/CustNY.png)
 
+**Notes / Interpretation:**
+
+* Filters only relevant rows.
+* Only selects required columns for efficiency.
+* SQLite is case-insensitive by default; other databases may require `UPPER()` or `LOWER()`.
+
 ---
 
 ### **3. Aggregation**
@@ -121,6 +132,12 @@ GROUP BY city
 ORDER BY total_customers DESC;
 ```
 !["Customers by City"](Images/Customer_By_City.png)
+
+**Notes / Interpretation:**
+
+* `GROUP BY` aggregates customers per city.
+* `ORDER BY ... DESC` highlights largest markets.
+* Watch for NULL or empty cities; they will be grouped separately.
 
 
 ---
@@ -140,6 +157,11 @@ INNER JOIN orders ON customers.customer_id = orders.customer_id;
 ```
 !["Customer_orders"](Images/Cust_Orders.png)
 
+**Notes / Interpretation:**
+
+* `INNER JOIN` ensures only customers with orders appear.
+* Use `LEFT JOIN` if you want all customers, including those without orders.
+* Concatenation (`||`) creates readable full names.
 
 ---
 
@@ -162,6 +184,13 @@ AND list_price > (
 ```
 !["Above 2019 Average"](Images/Above_average.png)
 
+
+**Notes / Interpretation:**
+
+* Inner query calculates the average price for 2019 models.
+* Outer query filters products above average.
+* Useful for **pricing strategy** and inventory prioritization.
+* Watch for NULLs in `list_price`.
 
 ---
 
@@ -186,6 +215,10 @@ WHERE order_id IN (
 ```
 !["Discounted Products"](Images/Discounted_Price.png)
 
+**Notes / Interpretation:**
+* `IN` subquery checks orders meeting discount conditions.
+* `DISTINCT` avoids duplicates.
+* Use `EXISTS` for better performance on large datasets.
 ---
 
 ### **7. Subquery with EXISTS**
@@ -206,6 +239,13 @@ WHERE EXISTS (
 ```
 
 !["Products Greater that 20% Discount"](Images/20_Discount.png)
+
+**Notes / Interpretation:**
+
+* `EXISTS` returns true if subquery finds any matching row.
+* Typically faster than `IN` for large tables.
+* Results help identify high-discount order patterns.
+
 
 ---
 
@@ -232,6 +272,12 @@ ORDER BY 2 DESC;
 
 !["CTE Revenue"](Images/CTE.png)
 
+**Notes / Interpretation:**
+
+* CTE computes a reusable temporary table for category-level metrics.
+* `DISTINCT` avoids duplicate orders.
+* Useful for **sales performance dashboards**.
+
 ---
 
 ### **9. Recursive CTE – Employee Hierarchy**
@@ -255,6 +301,13 @@ SELECT * FROM employee_hierarchy;
 
 !["Recursive CTE"](Images/RecursiveCTE.png)
 
+**Notes / Interpretation:**
+
+* Recursive CTE repeats queries to build hierarchical relationships.
+* First SELECT captures top-level managers.
+* Second SELECT iteratively joins subordinates.
+* Useful for HR dashboards or reporting structures.
+
 ---
 
 ### **10. Window Function – 30-Day Moving Average**
@@ -277,6 +330,12 @@ FROM daily_orders;
 ```
 
 !["30 Day Moving Average"](Images/30_day_avg.png)
+
+**Notes / Interpretation:**
+
+* `WINDOW FUNCTION` calculates rolling averages per store.
+* `ROWS BETWEEN 14 PRECEDING AND 15 FOLLOWING` ensures 30-day window.
+* Helps **forecast demand** and detect trends.
 ---
 
 ### **11. Customer Segmentation**
@@ -305,6 +364,13 @@ SELECT customer_id,
 FROM customer_stats;
 ```
 !["Customer Segementation"](Images/CUST_segmentation.png)
+
+**Notes / Interpretation:**
+
+* Segments customers for **marketing and loyalty programs**.
+* CTE simplifies calculations for later filtering and categorization.
+* Be mindful of customers with **no orders**; they will not appear.
+
 
 ---
 
@@ -337,6 +403,12 @@ GROUP BY 1,2;
 ```
 !["Seasonality"](Images/Seasonality.png)
 
+**Notes / Interpretation:**
+
+* Aggregates **monthly sales per category**.
+* Useful for **inventory planning** and promotional campaigns.
+* Watch for months with no orders; they will be ignored.
+
 ---
 
 ### **13. Customer Ranking**
@@ -356,6 +428,12 @@ GROUP BY 1
 ORDER BY 2 DESC;
 ```
 !["Customer Rankings"](Images/Customer_Rankings.png)
+
+**Notes / Interpretation:**
+
+* `RANK()` provides ranking of customers by number of transactions.
+* Helps identify **loyal or high-activity customers**.
+* Use `DENSE_RANK()` if you want no gaps in ranking.
 
 ---
 
@@ -381,6 +459,12 @@ ORDER BY co_purchase_count DESC;
 ```
 !["Frequently Purchased items"](Images/Frequently_purchased_items.png)
 
+**Notes / Interpretation:**
+
+* Inner join checks all product pairs in the same order.
+* Results help design **bundles and promotions**.
+* Be careful: duplicate pairs (A,B) and (B,A) may appear; deduplicate if needed.
+
 ---
 
 ### **15. Average Purchase Interval**
@@ -403,6 +487,13 @@ GROUP BY 1;
 ```
 !["Avergae Days"](Images/Avg_Days.png)
 
+**Notes / Interpretation:**
+
+* `LAG()` provides the previous order date per customer.
+* AVG calculates **typical purchase frequency**, useful for loyalty programs.
+* Excludes first purchase (no previous date).
+
+---
 
 
 ## 📈 Insights & Applications
