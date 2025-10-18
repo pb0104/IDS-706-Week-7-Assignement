@@ -496,14 +496,6 @@ GROUP BY 1;
 ---
 
 
-## 📈 Insights & Applications
-
-* **Sales Teams:** Identify top-selling categories and repeat buyers.
-* **Marketing Teams:** Segment customers for targeted campaigns.
-* **Inventory Teams:** Forecast demand based on seasonality and co-purchase patterns.
-* **Executives:** Analyze overall sales trends and employee hierarchy.
-
-
 ## 📜 Author
 
 - Author: PRANSHUL BHATNAGAR  
